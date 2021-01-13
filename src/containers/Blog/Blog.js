@@ -33,8 +33,8 @@ class Blog extends Component {
                 <div>
 
                     <Switch>
-                        <Route path='/new-post' component={NewPost} />
                         <Route path='/posts' component={Posts} />
+                        <Route path='/new-post' component={NewPost} />
                     </Switch>
 
                 </div>
