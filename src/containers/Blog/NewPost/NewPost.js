@@ -4,7 +4,7 @@ import axios from 'axios'
 import './NewPost.css';
 
 
-const NewPost = () => {
+const NewPost = props => {
 
     const [post, setPost] = useState({
         title: '',
@@ -14,9 +14,8 @@ const NewPost = () => {
 
     const addPost = () => {
         axios.post('/posts', post)
-            .then(res => console.log(res))
+            .then(res => props.history.push('/posts'))
     }
-
     return (
         <div className="NewPost">
             <h1>Add a Post</h1>

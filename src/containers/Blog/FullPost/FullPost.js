@@ -6,13 +6,22 @@ import './FullPost.css';
 const FullPost = props => {
 
     const [postData, setPostData] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (props.id) {
-            axios.get(`/posts/${props.id}`)
-                .then(res => setPostData(res.data))
+        setLoading(true)
+        if (props.match.params.id) {
+            axios.get(`/posts/${props.match.params.id}`)
+                .then(res => {
+                    setPostData(res.data)
+                    setLoading(false)
+                })
+                .catch(err => {
+                    console.log(err.message)
+                    setLoading(false)
+                })
         }
-    }, [props.id])
+    }, [props.match.params.id])
 
 
     const deletePost = (id) => {
@@ -21,12 +30,12 @@ const FullPost = props => {
     }
 
     let post = <p>Please select a Post!</p>;
-
-    if (postData) {
+    if (loading) post = 'Loading...'
+    else if (postData) {
         post = (
             <div className="FullPost">
                 <h1>{postData.title}</h1>
-                <p>{postData.content}</p>
+                <p>{postData.body}</p>
                 <div className="Edit">
                     <button className="Delete" onClick={() => deletePost(props.id)}>Delete</button>
                 </div>
