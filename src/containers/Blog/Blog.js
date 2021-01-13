@@ -1,12 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 // import { Route, Link } from 'react-router-dom'
-import { Route, NavLink, Switch } from 'react-router-dom'
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom'
 
 import './Blog.css';
 import Posts from './Posts/Posts'
-import NewPost from './NewPost/NewPost'
+const NewPost = React.lazy(() => import('./NewPost/NewPost'))
 
 class Blog extends Component {
+
+    state = {
+        auth: true
+    }
 
     render() {
         return (
@@ -34,7 +38,13 @@ class Blog extends Component {
 
                     <Switch>
                         <Route path='/posts' component={Posts} />
-                        <Route path='/new-post' component={NewPost} />
+                        {this.state.auth ?
+                            <Suspense fallback={<h1>Loading...</h1>}>
+                                <Route path='/new-post' component={NewPost} />
+                            </Suspense>
+                            : null}
+                        <Redirect from='/' to='/posts' /> // redirects everything to /posts
+                        {/* <Route render={() => <h1>Not Found</h1>} /> */} // sends you to not found page
                     </Switch>
 
                 </div>
